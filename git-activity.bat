@@ -14,16 +14,17 @@ if not exist %FILE_PATH% (
 )
 
 :loop
-echo 1 >> %FILE_PATH%
+set /a RANDOM_NUMBER=%random%10%random%%random%%random%%random%%random%%random%%random%%random%%random%%random%%random%%random%%random%%random%%random%%random%%random%%random%%random%%random%%random%%random%%random%%random%%random%%random%%random%
 
-:: Добавление изменений в репозиторий
+set /p LAST_LINE=<%FILE_PATH%
+
+echo %LAST_LINE% %RANDOM_NUMBER% >> %FILE_PATH%
+
 git -C %REPO_PATH% add %FILE_NAME%
-git -C %REPO_PATH% commit -m "Добавлен символ 1"
+git -C %REPO_PATH% commit -m "Add new symbol"
 
-:: Пуш изменений
 git -C %REPO_PATH% push origin master
 
-:: Пауза на 60 секунд (можете изменить по своему усмотрению)
 timeout /t 60 /nobreak >nul
 
 goto loop
