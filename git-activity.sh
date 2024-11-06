@@ -15,17 +15,28 @@ if [ ! -f "$FILE_PATH" ]; then
 fi
 
 while true; do
-    RANDOM_NUMBER=$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM
 
-    LAST_LINE=$(tail -n 1 "$FILE_PATH")
+    CURRENT_HOUR=$(date +"%H")
+    CURRENT_MINUTE=$(date +"%M")
 
-    echo "$LAST_LINE $RANDOM_NUMBER" >> "$FILE_PATH"
+    if ( [ "$CURRENT_HOUR" -eq 9 ] && [ "$CURRENT_MINUTE" -ge 25 ] ) || 
+       ( [ "$CURRENT_HOUR" -eq 10 ] && [ "$CURRENT_MINUTE" -le 35 ] ) || 
+       ( [ "$CURRENT_HOUR" -eq 19 ] && [ "$CURRENT_MINUTE" -ge 25 ] ) || 
+       ( [ "$CURRENT_HOUR" -eq 20 ] && [ "$CURRENT_MINUTE" -le 35 ] ); then
 
-    git -C "$REPO_PATH" add "$FILE_NAME"
-    git -C "$REPO_PATH" commit -m "Add new symbol"
+        RANDOM_NUMBER=$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM
 
-    git -C "$REPO_PATH" push origin master
+        LAST_LINE=$(tail -n 1 "$FILE_PATH")
 
-    sleep 43200  # 12 hours
+        echo "$LAST_LINE $RANDOM_NUMBER" >> "$FILE_PATH"
+
+        git -C "$REPO_PATH" add "$FILE_NAME"
+        git -C "$REPO_PATH" commit -m "Add new symbol"
+        git -C "$REPO_PATH" push origin master
+
+        sleep 3600 * 4
+    fi
+
+    sleep 3600
 done
 
